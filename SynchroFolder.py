@@ -6,6 +6,7 @@ import shutil
 import os
 import datetime
 
+##Set Folder and Make Sure Path Exists
 def setFolder(path):
     while(not os.path.exists(path)):
         print("ERROR: Path does not Exist:\n")
@@ -17,6 +18,7 @@ repFolder = setFolder(sys.argv[2])
 synchroTime = sys.argv[2]
 logPath = setFolder(sys.argv[4]) + "\\synchroFolder_LOG.txt"
 
+##LOG Actions
 def log(action):
     global logPath
     with open(logPath, "a") as log:
@@ -26,6 +28,7 @@ def log(action):
         print(action)
         log.close()
 
+##Copy the contents from Source directory to Destination
 def copyContents(source, dest):
     for item in os.listdir(source):
         itemPath = os.path.join(source, item)
@@ -36,18 +39,7 @@ def copyContents(source, dest):
             log("Copying Folder: " + item + " to " + dest)
             createFolder(itemPath, dest, False) 
 
-
-"""
-        for file in files:
-            log("Copying File: " + file + " to " + dest)
-            shutil.copyfile(os.path.join(source, file), os.path.join(dest, file))
-            ##Logging
-            
-        for folder in dirs:
-            log("Copying Folder: " + folder + " to " + dest)
-            createFolder(os.path.join(source,folder), dest, False)
-"""
-
+##Create a Folder at Specified Destination
 def createFolder(source, dest, isReplica):
     tmp = source.split('\\')
     dest = os.path.join(dest, tmp[len(tmp)-1])
@@ -60,3 +52,12 @@ def createFolder(source, dest, isReplica):
 
 repFolder = createFolder(ogFolder, repFolder, True)
 
+
+##TODO
+def checkFiles(ogFolder, repFolder):
+    ogFiles = os.listdir(ogFolder)
+    repFiles = os.listdir(repFolder)
+
+while(True):
+    checkFiles(ogFolder, repFolder)
+    time.sleep(synchroTime)
